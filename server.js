@@ -10,10 +10,9 @@ const {blogPost} = require('./models');
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/blogPost', (req, res) => {
+app.get('/blogPosts', (req, res) => {
   blogPost
     .find()
-    .limit(10)
       res.json({
         blogPosts: blogPosts.map(
           (blogPost) => blogPost.apiRepr())
@@ -26,23 +25,14 @@ app.get('/blogPost', (req, res) => {
     });
 });
 
-app.get('/blogPosts', (req, res) => {
-    const filters = {};
-    const queryableFields = ['title', 'author.firstName', 'author.lastName'];
-    queryableFields.forEach(field => {
-        if (req.query[field]) {
-            filters[field] = req.query[field];
-        }
+app.get('/blogPosts/:id', (req, res) => {
+  BlogPost
+    .findById(req.params.id)
+    .then(blogPost => res.json(blogPost.apiRepr()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({error: 'something went horribly awry'});
     });
-    blogPost
-        .find(filters)
-        .then(blogPosts => res.json(
-            blogPosts.map(blogPost => blogPost.apiRepr())
-        ))
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({message: 'Internal server error'})
-        });
 });
 
 app.post('/blogPosts', (req, res) => {
