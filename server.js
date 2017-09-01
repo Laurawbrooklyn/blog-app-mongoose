@@ -61,36 +61,36 @@ app.post('/blog-posts', (req, res) => {
   });
 });
 
-// app.put('/blogPosts/:id', (req, res) => {
-//   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-//     const message = (
-//       `Request path id (${req.params.id}) and request body id ` +
-//       `(${req.body.id}) must match`);
-//     console.error(message);
-//     return res.status(400).json({message: message});
-//   }
+app.put('/blog-posts/:id', (req, res) => {
+  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
+    const message = (
+      `Request path id (${req.params.id}) and request body id ` +
+      `(${req.body.id}) must match`);
+    console.error(message);
+    return res.status(400).json({message: message});
+  }
 
-//   const toUpdate = {};
-//   const updateableFields = ['title', 'content', 'author'];
+  const toUpdate = {};
+  const updateableFields = ['title', 'content', 'author'];
 
-//   updateableFields.forEach(field => {
-//     if (field in req.body) {
-//       toUpdate[field] = req.body[field];
-//     }
-//   });
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
 
-//   blogPost
-//   .findByIdAndUpdate(req.params.id, {$set: toUpdate})
-//   .then(blogPost => res.status(204).end())
-//   .catch(err => res.status(500).json({message: 'Internal server error'}));
-// });
+  BlogPost
+  .findByIdAndUpdate(req.params.id, {$set: toUpdate})
+  .then(blogPost => res.status(204).end())
+  .catch(err => res.status(500).json({message: 'Internal server error'}));
+});
 
-// app.delete('/blogPosts/:id', (req, res) => {
-//   blogPost
-//   .findByIdAndRemove(req.params.id)
-//   .then(blogPost => res.status(204).end())
-//   .catch(err => res.status(500).json({message: 'Internal server error'}));
-// });
+app.delete('/blog-posts/:id', (req, res) => {
+  BlogPost
+  .findByIdAndRemove(req.params.id)
+  .then(blogPost => res.status(204).end())
+  .catch(err => res.status(500).json({message: 'Internal server error'}));
+});
 
 app.use('*', function(req, res) {
   res.status(404).json({message: 'Not Found'});
