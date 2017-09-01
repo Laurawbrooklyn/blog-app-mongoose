@@ -9,9 +9,15 @@ const blogPostSchema = mongoose.Schema({
   },
 });
 
-//Not sure how to handle the "space" between firstName & lastName
-blogPostSchema.virtual('authorString').get(function() {
-  return `${this.author.firstName} {$ + } ${this.author.lastName}`.trim()});
+blogPostSchema.virtual('fullName').get(function() {
+  const auth = this.author;
+  return `${this.auth.firstName} ${this.auth.lastName}`;
+})
+.set(function (fullName) {
+  const [first, last] = fullName.split('');
+  this.author.firstName = first;
+  this.author.lastName = last;
+});
 
 blogPostSchema.methods.apiRepr = function() {
 
@@ -19,7 +25,7 @@ blogPostSchema.methods.apiRepr = function() {
     id: this._id,
     title: this.title,
     content: this.content,
-    author: this.authorString
+    author: this.authorName
   };
 }
 
