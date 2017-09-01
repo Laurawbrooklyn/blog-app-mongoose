@@ -26,15 +26,15 @@ app.get('/blog-posts', (req, res) => {
   });
 });
 
-// app.get('/blogPosts/:id', (req, res) => {
-//   BlogPost
-//   .findById(req.params.id)
-//   .then(blogPost => res.json(blogPost.apiRepr()))
-//   .catch(err => {
-//     console.error(err);
-//     res.status(500).json({error: 'something went horribly awry'});
-//   });
-// });
+app.get('/blog-posts/:id', (req, res) => {
+  BlogPost
+  .findById(req.params.id)
+  .then(blogPost => res.json(blogPost.apiRepr()))
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({error: 'something went horribly awry'});
+  });
+});
 
 app.post('/blog-posts', (req, res) => {
 
